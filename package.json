@@ -1,0 +1,22 @@
+{
+  "name": "toggl-csv-to-text-typescript",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "ssh://git@github.com/hasehiro0828/toggl-csv-to-text-typescript.git",
+  "author": "Hiroto Hasegawa <hiroto_hasegawa@voyagegroup.com>",
+  "license": "MIT",
+  "scripts": {
+    "start": "ts-node main.ts"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.26.0",
+    "@typescript-eslint/parser": "^4.26.0",
+    "eslint": "^7.28.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-import": "^2.23.4",
+    "prettier": "^2.3.0",
+    "ts-node": "^10.0.0",
+    "typescript": "^4.3.2"
+  }
+}
