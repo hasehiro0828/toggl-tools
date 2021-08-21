@@ -40,6 +40,7 @@ const convertTotalSecondsToDuration = (totalSeconds: number) => {
 };
 
 const direntArray = fs.readdirSync(CSV_DIR_PATH, { withFileTypes: true });
+direntArray.sort((a, b) => (a > b ? 1 : -1));
 const firstDirent = direntArray.find((dirent) => dirent.isFile());
 if (typeof firstDirent === "undefined") {
   console.log("ファイルが見つかりませんでした");
