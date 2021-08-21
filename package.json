@@ -6,7 +6,7 @@
   "author": "Hiroto Hasegawa <hiroto_hasegawa@voyagegroup.com>",
   "license": "MIT",
   "scripts": {
-    "start": "ts-node main.ts",
+    "start": "ts-node -r tsconfig-paths/register main.ts",
     "prepare": "husky install"
   },
   "lint-staged": {
@@ -25,11 +25,13 @@
     "eslint": "^7.28.0",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-config-prettier": "^8.3.0",
+    "eslint-import-resolver-typescript": "^2.4.0",
     "eslint-plugin-import": "^2.23.4",
     "husky": "^6.0.0",
     "lint-staged": "^11.0.0",
     "prettier": "^2.3.0",
     "ts-node": "^10.0.0",
+    "tsconfig-paths": "^3.10.1",
     "typescript": "^4.3.2"
   },
   "dependencies": {

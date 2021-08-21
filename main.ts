@@ -1,8 +1,9 @@
 /* eslint-disable no-console */
-import clipboardy from "clipboardy";
 import fs from "fs";
-import papaparse from "papaparse";
 import { exit } from "process";
+
+import clipboardy from "clipboardy";
+import papaparse from "papaparse";
 
 const CSV_DIR_PATH = "./csv";
 
