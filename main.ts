@@ -19,15 +19,30 @@ const main = async (): Promise<void> => {
     message: "時間を含めますか?",
   });
 
+  const allTimeEntries = importantProjects.map((project) => project.timeEntries).flat();
+
+  const timeEntryNameToStatusMap = new Map<string, string>();
+  // eslint-disable-next-line no-restricted-syntax
+  for await (const timeEntry of allTimeEntries) {
+    const status: { value: string } = await prompt({
+      type: "select",
+      name: "value",
+      message: `「${timeEntry.name}」の状態は？`,
+      choices: ["WIP", "本番反映済み", "レビュー中"],
+    });
+
+    timeEntryNameToStatusMap.set(timeEntry.name, status.value);
+  }
+
   let text = `Total Time: ${convertSecondsToDuration(totalSeconds)}\n\n`;
   importantProjects.forEach((project) => {
-    text += createTextFromProject(project, totalSeconds, includesTime.value);
+    text += createTextFromProject(project, totalSeconds, includesTime.value, timeEntryNameToStatusMap);
   });
 
   text += "\n---\n\n";
 
   unimportantProjects.forEach((project) => {
-    text += createTextFromProject(project, totalSeconds, includesTime.value);
+    text += createTextFromProject(project, totalSeconds, includesTime.value, timeEntryNameToStatusMap);
   });
 
   console.log(filePath);

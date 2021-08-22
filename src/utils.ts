@@ -21,7 +21,19 @@ export const convertSecondsToDuration = (_seconds: number): string => {
   return `${zeroPadding(hours)}:${zeroPadding(minutes)}:${zeroPadding(seconds)}`;
 };
 
-export const createTextFromProject = (project: Project, totalSeconds: number, includesTime: boolean): string => {
+export const createTextFromProject = (
+  project: Project,
+  totalSeconds: number,
+  includesTime: boolean,
+  timeEntryNameToStatusMap: Map<string, string>
+): string => {
+  const createStatusText = (timeEntryName: string): string => {
+    const status = timeEntryNameToStatusMap.get(timeEntryName);
+    if (typeof status === "undefined") return "";
+
+    return `【${status}】`;
+  };
+
   const createTimeText = (seconds: number): string => {
     if (!includesTime) return "";
 
@@ -35,7 +47,7 @@ export const createTextFromProject = (project: Project, totalSeconds: number, in
 
   let text = `- ${createTimeText(project.durationSeconds)}${title}\n`;
   project.timeEntries.forEach((timeEntry) => {
-    text += `  - ${createTimeText(timeEntry.durationSeconds)}${timeEntry.name}\n`;
+    text += `  - ${createStatusText(timeEntry.name)}${createTimeText(timeEntry.durationSeconds)}${timeEntry.name}\n`;
   });
 
   return text;
