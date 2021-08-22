@@ -18,12 +18,12 @@ interface TogglCsvJson {
 
 interface TimeEntry {
   name: string;
-  duration: string;
+  durationSeconds: number;
 }
 
 interface Project {
   name: string;
-  duration: string;
+  durationSeconds: number;
   timeEntries: TimeEntry[];
 }
 
@@ -31,12 +31,12 @@ const convertDurationToSeconds = (duration: string): number => {
   const [hours, minutes, seconds] = duration.split(":").map((str) => parseInt(str, 10));
   return hours * 3600 + minutes * 60 + seconds;
 };
-const convertTotalSecondsToDuration = (totalSeconds: number): string => {
+const convertSecondsToDuration = (_seconds: number): string => {
   const zeroPadding = (num: number): string => `00${num}`.slice(-2);
 
-  const hours = Math.floor(totalSeconds / 3600);
-  const minutes = Math.floor((totalSeconds % 3600) / 60);
-  const seconds = totalSeconds % 60;
+  const hours = Math.floor(_seconds / 3600);
+  const minutes = Math.floor((_seconds % 3600) / 60);
+  const seconds = _seconds % 60;
 
   return `${zeroPadding(hours)}:${zeroPadding(minutes)}:${zeroPadding(seconds)}`;
 };
@@ -45,9 +45,9 @@ const createTextFromProject = (project: Project): string => {
   const alias = NAME_TO_ALIAS_MAP.get(project.name);
   const title = typeof alias !== "undefined" ? `${alias}(${project.name})` : project.name;
 
-  let text = `- [${project.duration}] ${title}\n`;
+  let text = `- [${convertSecondsToDuration(project.durationSeconds)}] ${title}\n`;
   project.timeEntries.forEach((timeEntry) => {
-    text += `  - [${timeEntry.duration}] ${timeEntry.name}\n`;
+    text += `  - [${convertSecondsToDuration(timeEntry.durationSeconds)}] ${timeEntry.name}\n`;
   });
 
   return text;
@@ -78,27 +78,29 @@ const projectArray: Project[] = [];
 filteredTogglJsonArray.forEach((togglJson) => {
   const timeEntry: TimeEntry = {
     name: togglJson.Title,
-    duration: togglJson.Duration,
+    durationSeconds: convertDurationToSeconds(togglJson.Duration),
   };
 
   const sameProject = projectArray.find((project) => project.name === togglJson.Project);
   if (typeof sameProject === "undefined") {
-    projectArray.push({ name: togglJson.Project, duration: togglJson.Duration, timeEntries: [timeEntry] });
+    projectArray.push({
+      name: togglJson.Project,
+      durationSeconds: convertDurationToSeconds(togglJson.Duration),
+      timeEntries: [timeEntry],
+    });
   } else {
     const timeEntryTotalSeconds = convertDurationToSeconds(togglJson.Duration);
-    const projectTotalSeconds = convertDurationToSeconds(sameProject.duration);
+    const projectTotalSeconds = sameProject.durationSeconds;
     sameProject.timeEntries.push(timeEntry);
-    sameProject.duration = convertTotalSecondsToDuration(timeEntryTotalSeconds + projectTotalSeconds);
+    sameProject.durationSeconds = timeEntryTotalSeconds + projectTotalSeconds;
   }
 });
-const totalSeconds = projectArray
-  .map((project) => convertDurationToSeconds(project.duration))
-  .reduce((sum, elm) => sum + elm);
+const totalSeconds = projectArray.map((project) => project.durationSeconds).reduce((sum, elm) => sum + elm);
 
 const unimportantProjects = projectArray.filter((project) => UNIMPORTANT_PROJECTS.includes(project.name));
 const importantProjects = projectArray.filter((project) => !UNIMPORTANT_PROJECTS.includes(project.name));
 
-let text = `Total Time: ${convertTotalSecondsToDuration(totalSeconds)}\n`;
+let text = `Total Time: ${convertSecondsToDuration(totalSeconds)}\n\n`;
 importantProjects.forEach((project) => {
   text += createTextFromProject(project);
 });
