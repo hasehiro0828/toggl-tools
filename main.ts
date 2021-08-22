@@ -25,12 +25,12 @@ interface Project {
   timeEntries: TimeEntry[];
 }
 
-const convertDurationToSeconds = (duration: string) => {
+const convertDurationToSeconds = (duration: string): number => {
   const [hours, minutes, seconds] = duration.split(":").map((str) => parseInt(str, 10));
   return hours * 3600 + minutes * 60 + seconds;
 };
-const convertTotalSecondsToDuration = (totalSeconds: number) => {
-  const zeroPadding = (num: number) => `00${num}`.slice(-2);
+const convertTotalSecondsToDuration = (totalSeconds: number): string => {
+  const zeroPadding = (num: number): string => `00${num}`.slice(-2);
 
   const hours = Math.floor(totalSeconds / 3600);
   const minutes = Math.floor((totalSeconds % 3600) / 60);
