@@ -41,13 +41,19 @@ const convertSecondsToDuration = (_seconds: number): string => {
   return `${zeroPadding(hours)}:${zeroPadding(minutes)}:${zeroPadding(seconds)}`;
 };
 
-const createTextFromProject = (project: Project): string => {
+const createTextFromProject = (project: Project, totalSeconds: number): string => {
+  const getPercentageText = (seconds: number): string => `${((seconds / totalSeconds) * 100).toFixed(0)}%`;
+
   const alias = NAME_TO_ALIAS_MAP.get(project.name);
   const title = typeof alias !== "undefined" ? `${alias}(${project.name})` : project.name;
 
-  let text = `- [${convertSecondsToDuration(project.durationSeconds)}] ${title}\n`;
+  let text = `- ${getPercentageText(project.durationSeconds)} [${convertSecondsToDuration(
+    project.durationSeconds
+  )}] ${title}\n`;
   project.timeEntries.forEach((timeEntry) => {
-    text += `  - [${convertSecondsToDuration(timeEntry.durationSeconds)}] ${timeEntry.name}\n`;
+    text += `  - ${getPercentageText(timeEntry.durationSeconds)} [${convertSecondsToDuration(
+      timeEntry.durationSeconds
+    )}] ${timeEntry.name}\n`;
   });
 
   return text;
@@ -102,13 +108,13 @@ const importantProjects = projectArray.filter((project) => !UNIMPORTANT_PROJECTS
 
 let text = `Total Time: ${convertSecondsToDuration(totalSeconds)}\n\n`;
 importantProjects.forEach((project) => {
-  text += createTextFromProject(project);
+  text += createTextFromProject(project, totalSeconds);
 });
 
 text += "\n---\n\n";
 
 unimportantProjects.forEach((project) => {
-  text += createTextFromProject(project);
+  text += createTextFromProject(project, totalSeconds);
 });
 
 console.log(filePath);
