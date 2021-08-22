@@ -6,22 +6,26 @@ import { convertSecondsToDuration, createTextFromProject, getProjectsFromCsv } f
 
 const { projects: projectArray, filePath } = getProjectsFromCsv();
 
-const totalSeconds = projectArray.map((project) => project.durationSeconds).reduce((sum, elm) => sum + elm);
+const main = async (): Promise<void> => {
+  const totalSeconds = projectArray.map((project) => project.durationSeconds).reduce((sum, elm) => sum + elm);
 
-const unimportantProjects = projectArray.filter((project) => UNIMPORTANT_PROJECTS.includes(project.name));
-const importantProjects = projectArray.filter((project) => !UNIMPORTANT_PROJECTS.includes(project.name));
+  const unimportantProjects = projectArray.filter((project) => UNIMPORTANT_PROJECTS.includes(project.name));
+  const importantProjects = projectArray.filter((project) => !UNIMPORTANT_PROJECTS.includes(project.name));
 
-let text = `Total Time: ${convertSecondsToDuration(totalSeconds)}\n\n`;
-importantProjects.forEach((project) => {
-  text += createTextFromProject(project, totalSeconds);
-});
+  let text = `Total Time: ${convertSecondsToDuration(totalSeconds)}\n\n`;
+  importantProjects.forEach((project) => {
+    text += createTextFromProject(project, totalSeconds);
+  });
 
-text += "\n---\n\n";
+  text += "\n---\n\n";
 
-unimportantProjects.forEach((project) => {
-  text += createTextFromProject(project, totalSeconds);
-});
+  unimportantProjects.forEach((project) => {
+    text += createTextFromProject(project, totalSeconds);
+  });
 
-console.log(filePath);
-console.log("🎉クリップボードにコピーしました🎉");
-clipboardy.writeSync(text);
+  console.log(filePath);
+  console.log("🎉クリップボードにコピーしました🎉");
+  clipboardy.writeSync(text);
+};
+
+main();
