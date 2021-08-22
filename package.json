@@ -36,6 +36,7 @@
   },
   "dependencies": {
     "clipboardy": "^2.3.0",
+    "enquirer": "^2.3.6",
     "papaparse": "^5.3.1"
   }
 }

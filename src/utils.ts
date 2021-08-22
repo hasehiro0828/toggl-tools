@@ -21,19 +21,21 @@ export const convertSecondsToDuration = (_seconds: number): string => {
   return `${zeroPadding(hours)}:${zeroPadding(minutes)}:${zeroPadding(seconds)}`;
 };
 
-export const createTextFromProject = (project: Project, totalSeconds: number): string => {
-  const getPercentageText = (seconds: number): string => `${((seconds / totalSeconds) * 100).toFixed(0)}%`;
+export const createTextFromProject = (project: Project, totalSeconds: number, includesTime: boolean): string => {
+  const createTimeText = (seconds: number): string => {
+    if (!includesTime) return "";
+
+    const percentageText = `${((seconds / totalSeconds) * 100).toFixed(0)}%`;
+
+    return `${percentageText} [${convertSecondsToDuration(seconds)}] `;
+  };
 
   const alias = NAME_TO_ALIAS_MAP.get(project.name);
   const title = typeof alias !== "undefined" ? `${alias}(${project.name})` : project.name;
 
-  let text = `- ${getPercentageText(project.durationSeconds)} [${convertSecondsToDuration(
-    project.durationSeconds
-  )}] ${title}\n`;
+  let text = `- ${createTimeText(project.durationSeconds)}${title}\n`;
   project.timeEntries.forEach((timeEntry) => {
-    text += `  - ${getPercentageText(timeEntry.durationSeconds)} [${convertSecondsToDuration(
-      timeEntry.durationSeconds
-    )}] ${timeEntry.name}\n`;
+    text += `  - ${createTimeText(timeEntry.durationSeconds)}${timeEntry.name}\n`;
   });
 
   return text;
