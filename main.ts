@@ -6,26 +6,9 @@ import clipboardy from "clipboardy";
 import papaparse from "papaparse";
 
 import { NAME_TO_ALIAS_MAP, UNIMPORTANT_PROJECTS } from "@/constants";
+import { Project, TimeEntry, TogglCsvJson } from "@/model";
 
 const CSV_DIR_PATH = "./csv";
-
-interface TogglCsvJson {
-  Project: string;
-  Client: string;
-  Title: string;
-  Duration: string;
-}
-
-interface TimeEntry {
-  name: string;
-  durationSeconds: number;
-}
-
-interface Project {
-  name: string;
-  durationSeconds: number;
-  timeEntries: TimeEntry[];
-}
 
 const convertDurationToSeconds = (duration: string): number => {
   const [hours, minutes, seconds] = duration.split(":").map((str) => parseInt(str, 10));
