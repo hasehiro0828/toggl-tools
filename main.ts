@@ -91,11 +91,14 @@ filteredTogglJsonArray.forEach((togglJson) => {
     sameProject.duration = convertTotalSecondsToDuration(timeEntryTotalSeconds + projectTotalSeconds);
   }
 });
+const totalSeconds = projectArray
+  .map((project) => convertDurationToSeconds(project.duration))
+  .reduce((sum, elm) => sum + elm);
 
 const unimportantProjects = projectArray.filter((project) => UNIMPORTANT_PROJECTS.includes(project.name));
 const importantProjects = projectArray.filter((project) => !UNIMPORTANT_PROJECTS.includes(project.name));
 
-let text = "";
+let text = `Total Time: ${convertTotalSecondsToDuration(totalSeconds)}\n`;
 importantProjects.forEach((project) => {
   text += createTextFromProject(project);
 });
