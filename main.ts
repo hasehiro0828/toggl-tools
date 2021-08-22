@@ -5,42 +5,11 @@ import { exit } from "process";
 import clipboardy from "clipboardy";
 import papaparse from "papaparse";
 
-import { NAME_TO_ALIAS_MAP, UNIMPORTANT_PROJECTS } from "@/constants";
+import { UNIMPORTANT_PROJECTS } from "@/constants";
 import { Project, TimeEntry, TogglCsvJson } from "@/model";
+import { convertDurationToSeconds, convertSecondsToDuration, createTextFromProject } from "@/utils";
 
 const CSV_DIR_PATH = "./csv";
-
-const convertDurationToSeconds = (duration: string): number => {
-  const [hours, minutes, seconds] = duration.split(":").map((str) => parseInt(str, 10));
-  return hours * 3600 + minutes * 60 + seconds;
-};
-const convertSecondsToDuration = (_seconds: number): string => {
-  const zeroPadding = (num: number): string => `00${num}`.slice(-2);
-
-  const hours = Math.floor(_seconds / 3600);
-  const minutes = Math.floor((_seconds % 3600) / 60);
-  const seconds = _seconds % 60;
-
-  return `${zeroPadding(hours)}:${zeroPadding(minutes)}:${zeroPadding(seconds)}`;
-};
-
-const createTextFromProject = (project: Project, totalSeconds: number): string => {
-  const getPercentageText = (seconds: number): string => `${((seconds / totalSeconds) * 100).toFixed(0)}%`;
-
-  const alias = NAME_TO_ALIAS_MAP.get(project.name);
-  const title = typeof alias !== "undefined" ? `${alias}(${project.name})` : project.name;
-
-  let text = `- ${getPercentageText(project.durationSeconds)} [${convertSecondsToDuration(
-    project.durationSeconds
-  )}] ${title}\n`;
-  project.timeEntries.forEach((timeEntry) => {
-    text += `  - ${getPercentageText(timeEntry.durationSeconds)} [${convertSecondsToDuration(
-      timeEntry.durationSeconds
-    )}] ${timeEntry.name}\n`;
-  });
-
-  return text;
-};
 
 const direntArray = fs.readdirSync(CSV_DIR_PATH, { withFileTypes: true });
 direntArray.sort((a, b) => (a > b ? 1 : -1));
