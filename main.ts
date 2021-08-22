@@ -5,6 +5,8 @@ import { exit } from "process";
 import clipboardy from "clipboardy";
 import papaparse from "papaparse";
 
+import { NAME_TO_ALIAS_MAP, UNIMPORTANT_PROJECTS } from "@/constants";
+
 const CSV_DIR_PATH = "./csv";
 
 interface TogglCsvJson {
@@ -37,6 +39,18 @@ const convertTotalSecondsToDuration = (totalSeconds: number): string => {
   const seconds = totalSeconds % 60;
 
   return `${zeroPadding(hours)}:${zeroPadding(minutes)}:${zeroPadding(seconds)}`;
+};
+
+const createTextFromProject = (project: Project): string => {
+  const alias = NAME_TO_ALIAS_MAP.get(project.name);
+  const title = typeof alias !== "undefined" ? `${alias}(${project.name})` : project.name;
+
+  let text = `- [${project.duration}] ${title}\n`;
+  project.timeEntries.forEach((timeEntry) => {
+    text += `  - [${timeEntry.duration}] ${timeEntry.name}\n`;
+  });
+
+  return text;
 };
 
 const direntArray = fs.readdirSync(CSV_DIR_PATH, { withFileTypes: true });
@@ -78,12 +92,18 @@ filteredTogglJsonArray.forEach((togglJson) => {
   }
 });
 
+const unimportantProjects = projectArray.filter((project) => UNIMPORTANT_PROJECTS.includes(project.name));
+const importantProjects = projectArray.filter((project) => !UNIMPORTANT_PROJECTS.includes(project.name));
+
 let text = "";
-projectArray.forEach((project) => {
-  text += `- [${project.duration}] ${project.name}\n`;
-  project.timeEntries.forEach((timeEntry) => {
-    text += `  - [${timeEntry.duration}] ${timeEntry.name}\n`;
-  });
+importantProjects.forEach((project) => {
+  text += createTextFromProject(project);
+});
+
+text += "\n---\n\n";
+
+unimportantProjects.forEach((project) => {
+  text += createTextFromProject(project);
 });
 
 console.log(filePath);
