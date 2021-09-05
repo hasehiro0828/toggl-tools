@@ -3,7 +3,12 @@ import clipboardy from "clipboardy";
 import { prompt } from "enquirer";
 
 import { UNIMPORTANT_PROJECTS } from "@/constants";
-import { convertSecondsToDuration, createTextFromProject, getProjectsFromCsv } from "@/utils";
+import {
+  convertSecondsToDuration,
+  createTextFromProject,
+  createTextOfTotalTimeOfProjects,
+  getProjectsFromCsv,
+} from "@/utils";
 
 const { projects: projectArray, filePath } = getProjectsFromCsv();
 
@@ -35,11 +40,15 @@ const main = async (): Promise<void> => {
   const totalSeconds = projectArray.map((project) => project.durationSeconds).reduce((sum, elm) => sum + elm);
   let text = `Total Time: ${convertSecondsToDuration(totalSeconds)}\n\n`;
 
+  text += `importantProjects の合計時間: ${createTextOfTotalTimeOfProjects(importantProjects, totalSeconds)}\n`;
+
   importantProjects.forEach((project) => {
     text += createTextFromProject(project, totalSeconds, includesTime.value, timeEntryNameToStatusMap);
   });
 
   text += "\n---\n\n";
+
+  text += `unimportantProjects の合計時間: ${createTextOfTotalTimeOfProjects(unimportantProjects, totalSeconds)}\n`;
 
   unimportantProjects.forEach((project) => {
     text += createTextFromProject(project, totalSeconds, includesTime.value, timeEntryNameToStatusMap);

@@ -21,6 +21,13 @@ export const convertSecondsToDuration = (_seconds: number): string => {
   return `${zeroPadding(hours)}:${zeroPadding(minutes)}:${zeroPadding(seconds)}`;
 };
 
+export const createTextOfTotalTimeOfProjects = (projects: Project[], totalSeconds: number): string => {
+  const projectsTotalSeconds = projects.map((project) => project.durationSeconds).reduce((sum, elm) => sum + elm);
+  const projectsTotalSecondsPercentage = ((projectsTotalSeconds / totalSeconds) * 100).toFixed(0);
+
+  return `${projectsTotalSecondsPercentage}% [${convertSecondsToDuration(projectsTotalSeconds)}]`;
+};
+
 export const createTextFromProject = (
   project: Project,
   totalSeconds: number,
