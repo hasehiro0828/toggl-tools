@@ -16,12 +16,6 @@ const main = async (): Promise<void> => {
   const unimportantProjects = projectArray.filter((project) => UNIMPORTANT_PROJECTS.includes(project.name));
   const importantProjects = projectArray.filter((project) => !UNIMPORTANT_PROJECTS.includes(project.name));
 
-  const includesTime: { value: boolean } = await prompt({
-    type: "confirm",
-    name: "value",
-    message: "時間を含めますか?",
-  });
-
   const allTimeEntries = importantProjects.map((project) => project.timeEntries).flat();
 
   const timeEntryNameToStatusMap = new Map<string, string>();
@@ -38,26 +32,35 @@ const main = async (): Promise<void> => {
   }
 
   const totalSeconds = projectArray.map((project) => project.durationSeconds).reduce((sum, elm) => sum + elm);
-  let text = `Total Time: ${convertSecondsToDuration(totalSeconds)}\n\n`;
+  let textWithTime = `Total Time: ${convertSecondsToDuration(totalSeconds)}\n\n`;
+  let textWithoutTime = "";
 
-  text += `importantProjects の合計時間: ${createTextOfTotalTimeOfProjects(importantProjects, totalSeconds)}\n`;
+  textWithTime += `importantProjects の合計時間: ${createTextOfTotalTimeOfProjects(importantProjects, totalSeconds)}\n`;
 
   importantProjects.forEach((project) => {
-    text += createTextFromProject(project, totalSeconds, includesTime.value, timeEntryNameToStatusMap);
+    textWithTime += createTextFromProject(project, totalSeconds, true, timeEntryNameToStatusMap);
+    textWithoutTime += createTextFromProject(project, totalSeconds, false, timeEntryNameToStatusMap);
   });
 
-  text += "\n---\n\n";
+  textWithTime += "\n---\n\n";
+  textWithoutTime += "\n---\n\n";
 
-  text += `unimportantProjects の合計時間: ${createTextOfTotalTimeOfProjects(unimportantProjects, totalSeconds)}\n`;
+  textWithTime += `unimportantProjects の合計時間: ${createTextOfTotalTimeOfProjects(
+    unimportantProjects,
+    totalSeconds
+  )}\n`;
 
   unimportantProjects.forEach((project) => {
-    text += createTextFromProject(project, totalSeconds, includesTime.value, timeEntryNameToStatusMap);
+    textWithTime += createTextFromProject(project, totalSeconds, true, timeEntryNameToStatusMap);
+    textWithoutTime += createTextFromProject(project, totalSeconds, false, timeEntryNameToStatusMap);
   });
 
+  const resultText = `${textWithTime}\n--------------\n\n${textWithoutTime}`;
+
   console.log(filePath);
-  console.log(text);
+  console.log(resultText);
+  clipboardy.writeSync(resultText);
   console.log("🎉クリップボードにコピーしました🎉");
-  clipboardy.writeSync(text);
 };
 
 main();
