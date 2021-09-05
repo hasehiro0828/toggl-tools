@@ -8,8 +8,6 @@ import { convertSecondsToDuration, createTextFromProject, getProjectsFromCsv } f
 const { projects: projectArray, filePath } = getProjectsFromCsv();
 
 const main = async (): Promise<void> => {
-  const totalSeconds = projectArray.map((project) => project.durationSeconds).reduce((sum, elm) => sum + elm);
-
   const unimportantProjects = projectArray.filter((project) => UNIMPORTANT_PROJECTS.includes(project.name));
   const importantProjects = projectArray.filter((project) => !UNIMPORTANT_PROJECTS.includes(project.name));
 
@@ -34,7 +32,9 @@ const main = async (): Promise<void> => {
     timeEntryNameToStatusMap.set(timeEntry.name, status.value);
   }
 
+  const totalSeconds = projectArray.map((project) => project.durationSeconds).reduce((sum, elm) => sum + elm);
   let text = `Total Time: ${convertSecondsToDuration(totalSeconds)}\n\n`;
+
   importantProjects.forEach((project) => {
     text += createTextFromProject(project, totalSeconds, includesTime.value, timeEntryNameToStatusMap);
   });
