@@ -47,7 +47,7 @@ export const createTextFromProject = (
 
   let text = `- ${createTimeText(project.durationSeconds)}${title}\n`;
   project.timeEntries.forEach((timeEntry) => {
-    text += `  - ${createStatusText(timeEntry.name)}${createTimeText(timeEntry.durationSeconds)}${timeEntry.name}\n`;
+    text += `  - ${createTimeText(timeEntry.durationSeconds)}${createStatusText(timeEntry.name)}${timeEntry.name}\n`;
   });
 
   return text;
