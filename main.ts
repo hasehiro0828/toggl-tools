@@ -1,5 +1,6 @@
 /* eslint-disable no-console */
-import clipboardy from "clipboardy";
+import * as fs from "fs";
+
 import { prompt } from "enquirer";
 
 import { UNIMPORTANT_PROJECTS } from "@/constants";
@@ -56,11 +57,16 @@ const main = async (): Promise<void> => {
   });
 
   const resultText = `${textWithTime}\n--------------\n\n${textWithoutTime}`;
+  const resultTextFileName = filePath.replace("./csv/Toggl_Track_summary_report_", "").replace(".csv", "");
 
+  if (!fs.existsSync("results")) {
+    fs.mkdirSync("results");
+  }
+  fs.writeFileSync(`results/${resultTextFileName}.txt`, resultText);
+
+  console.log("--------------------------------------------");
   console.log(filePath);
-  console.log(resultText);
-  clipboardy.writeSync(resultText);
-  console.log("🎉クリップボードにコピーしました🎉");
+  console.log("🎉結果を保存しました🎉");
 };
 
 main();
