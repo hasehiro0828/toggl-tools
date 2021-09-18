@@ -82,13 +82,19 @@ export const getProjectsFromCsv = (): { projects: Project[]; filePath: string } 
     // csvの最初に何か変なもの入ってるのかも
     transformHeader: (header) => header.trim(),
   });
+  if (parseResult.meta.fields?.some((field) => !["Project", "Client", "Description", "Duration"].includes(field))) {
+    // eslint-disable-next-line no-console
+    console.error(`csv のヘッダーが変更されました: ${parseResult.meta.fields}`);
+    exit(1);
+  }
+
   const togglJsonArray: TogglCsvJson[] = parseResult.data as TogglCsvJson[];
   const filteredTogglJsonArray = togglJsonArray.filter((togglJson) => togglJson.Project !== "");
 
   const projectArray: Project[] = [];
   filteredTogglJsonArray.forEach((togglJson) => {
     const timeEntry: TimeEntry = {
-      name: togglJson.Title,
+      name: togglJson.Description,
       durationSeconds: convertDurationToSeconds(togglJson.Duration),
     };
 

@@ -1,7 +1,7 @@
 export interface TogglCsvJson {
   Project: string;
   Client: string;
-  Title: string;
+  Description: string;
   Duration: string;
 }
 
