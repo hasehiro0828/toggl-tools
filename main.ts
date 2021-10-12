@@ -17,7 +17,10 @@ const main = async (): Promise<void> => {
   const unimportantProjects = projectArray.filter((project) => UNIMPORTANT_PROJECTS.includes(project.name));
   const importantProjects = projectArray.filter((project) => !UNIMPORTANT_PROJECTS.includes(project.name));
 
-  const allTimeEntries = importantProjects.map((project) => project.timeEntries).flat();
+  const allTimeEntries = importantProjects
+    .filter((project) => project.name !== "General")
+    .map((project) => project.timeEntries)
+    .flat();
 
   const timeEntryNameToStatusMap = new Map<string, string>();
   // eslint-disable-next-line no-restricted-syntax
