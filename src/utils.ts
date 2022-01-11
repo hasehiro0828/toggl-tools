@@ -82,7 +82,14 @@ export const getProjectsFromCsv = (): { projects: Project[]; filePath: string } 
     // csvの最初に何か変なもの入ってるのかも
     transformHeader: (header) => header.trim(),
   });
-  if (parseResult.meta.fields?.some((field) => !["Project", "Client", "Description", "Duration"].includes(field))) {
+  if (
+    parseResult.meta.fields?.some(
+      (field) =>
+        !["Project", "Client", "Description", "Duration", "Billable duration", "Amount USD", "Amount 円"].includes(
+          field
+        )
+    )
+  ) {
     // eslint-disable-next-line no-console
     console.error(`csv のヘッダーが変更されました: ${parseResult.meta.fields}`);
     exit(1);
