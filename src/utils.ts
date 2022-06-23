@@ -12,7 +12,7 @@ export const convertDurationToSeconds = (duration: string): number => {
 };
 
 export const convertSecondsToDuration = (_seconds: number): string => {
-  const zeroPadding = (num: number): string => `00${num}`.slice(-2);
+  const zeroPadding = (num: number): string => (num >= 100 ? `${num}` : `00${num}`.slice(-2));
 
   const hours = Math.floor(_seconds / 3600);
   const minutes = Math.floor((_seconds % 3600) / 60);
