@@ -4,4 +4,7 @@ export const NAME_TO_ALIAS_MAP = new Map<string, string>([
   ["name2", "名前2"],
 ]);
 
-export const UNIMPORTANT_PROJECTS = ["A", "B", "C"];
+export const GROUP_SETTINGS = {
+  A_GROUP: ["name1", "name2"],
+  B_GROUP: ["name3"],
+};

@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import * as fs from "fs";
 
-import { UNIMPORTANT_PROJECTS } from "@/constants";
+import { GROUP_SETTINGS } from "@/constants";
 import {
   convertSecondsToDuration,
   createTextFromProject,
@@ -10,14 +10,22 @@ import {
   getTimeEntryNameToStatusMap,
 } from "@/utils";
 
+const GROUP_PROJECT_MAP = new Map<string, string>(
+  Object.entries(GROUP_SETTINGS).flatMap(([group, names]) => names.map((name) => [name, group]))
+);
+
 const { projects: projectArray, filePath } = getProjectsFromCsv();
 
 const main = async (): Promise<void> => {
-  const unimportantProjects = projectArray.filter((project) => UNIMPORTANT_PROJECTS.includes(project.name));
-  const importantProjects = projectArray.filter((project) => !UNIMPORTANT_PROJECTS.includes(project.name));
+  const unimportantProjects = projectArray.filter(
+    (project) => typeof GROUP_PROJECT_MAP.get(project.name) !== "undefined"
+  );
+  const importantProjects = projectArray.filter(
+    (project) => typeof GROUP_PROJECT_MAP.get(project.name) === "undefined"
+  );
 
   const timeEntryNameToStatusMap = await getTimeEntryNameToStatusMap(
-    importantProjects.filter((project) => project.name !== "General")
+    importantProjects.filter((project) => project.name !== "DevGeneral")
   );
 
   const totalSeconds = projectArray.map((project) => project.durationSeconds).reduce((sum, elm) => sum + elm);
