@@ -1,6 +1,7 @@
 import fs from "fs";
 import { exit } from "process";
 
+import { prompt } from "enquirer";
 import papaparse from "papaparse";
 
 import { NAME_TO_ALIAS_MAP } from "@/constants";
@@ -121,4 +122,23 @@ export const getProjectsFromCsv = (): { projects: Project[]; filePath: string } 
   });
 
   return { projects: projectArray, filePath };
+};
+
+export const getTimeEntryNameToStatusMap = async (projects: Project[]): Promise<Map<string, string>> => {
+  const timeEntriesNeedToChoiceStatus = projects.flatMap((project) => project.timeEntries);
+
+  const timeEntryNameToStatusMap = new Map<string, string>();
+  // eslint-disable-next-line no-restricted-syntax
+  for await (const timeEntry of timeEntriesNeedToChoiceStatus) {
+    const status: { value: string } = await prompt({
+      type: "select",
+      name: "value",
+      message: `「${timeEntry.name}」の状態は？`,
+      choices: ["WIP", "レビュー中", "修正中", "ステージング確認中", "本番反映済み", "DONE"],
+    });
+
+    timeEntryNameToStatusMap.set(timeEntry.name, status.value);
+  }
+
+  return timeEntryNameToStatusMap;
 };

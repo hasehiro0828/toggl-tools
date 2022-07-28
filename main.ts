@@ -1,14 +1,13 @@
 /* eslint-disable no-console */
 import * as fs from "fs";
 
-import { prompt } from "enquirer";
-
 import { UNIMPORTANT_PROJECTS } from "@/constants";
 import {
   convertSecondsToDuration,
   createTextFromProject,
   createTextOfTotalTimeOfProjects,
   getProjectsFromCsv,
+  getTimeEntryNameToStatusMap,
 } from "@/utils";
 
 const { projects: projectArray, filePath } = getProjectsFromCsv();
@@ -17,23 +16,9 @@ const main = async (): Promise<void> => {
   const unimportantProjects = projectArray.filter((project) => UNIMPORTANT_PROJECTS.includes(project.name));
   const importantProjects = projectArray.filter((project) => !UNIMPORTANT_PROJECTS.includes(project.name));
 
-  const timeEntriesNeedToChoiceStatus = importantProjects
-    .filter((project) => project.name !== "General")
-    .map((project) => project.timeEntries)
-    .flat();
-
-  const timeEntryNameToStatusMap = new Map<string, string>();
-  // eslint-disable-next-line no-restricted-syntax
-  for await (const timeEntry of timeEntriesNeedToChoiceStatus) {
-    const status: { value: string } = await prompt({
-      type: "select",
-      name: "value",
-      message: `「${timeEntry.name}」の状態は？`,
-      choices: ["WIP", "レビュー中", "修正中", "ステージング確認中", "本番反映済み", "DONE"],
-    });
-
-    timeEntryNameToStatusMap.set(timeEntry.name, status.value);
-  }
+  const timeEntryNameToStatusMap = await getTimeEntryNameToStatusMap(
+    importantProjects.filter((project) => project.name !== "General")
+  );
 
   const totalSeconds = projectArray.map((project) => project.durationSeconds).reduce((sum, elm) => sum + elm);
   let textWithTime = `Total Time: ${convertSecondsToDuration(totalSeconds)}\n\n`;
