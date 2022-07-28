@@ -17,24 +17,20 @@ const GROUP_PROJECT_MAP = new Map<string, string>(
 const { projects: projectArray, filePath } = getProjectsFromCsv();
 
 const main = async (): Promise<void> => {
-  const unimportantProjects = projectArray.filter(
-    (project) => typeof GROUP_PROJECT_MAP.get(project.name) !== "undefined"
-  );
-  const importantProjects = projectArray.filter(
-    (project) => typeof GROUP_PROJECT_MAP.get(project.name) === "undefined"
-  );
+  const otherProjects = projectArray.filter((project) => typeof GROUP_PROJECT_MAP.get(project.name) !== "undefined");
+  const devProjects = projectArray.filter((project) => typeof GROUP_PROJECT_MAP.get(project.name) === "undefined");
 
   const timeEntryNameToStatusMap = await getTimeEntryNameToStatusMap(
-    importantProjects.filter((project) => project.name !== "DevGeneral")
+    devProjects.filter((project) => project.name !== "DevGeneral")
   );
 
   const totalSeconds = projectArray.map((project) => project.durationSeconds).reduce((sum, elm) => sum + elm);
   let textWithTime = `Total Time: ${convertSecondsToDuration(totalSeconds)}\n\n`;
   let textWithoutTime = "";
 
-  textWithTime += `importantProjects の合計時間: ${createTextOfTotalTimeOfProjects(importantProjects, totalSeconds)}\n`;
+  textWithTime += `## 開発系 の合計時間: ${createTextOfTotalTimeOfProjects(devProjects, totalSeconds)}\n`;
 
-  importantProjects.forEach((project) => {
+  devProjects.forEach((project) => {
     textWithTime += createTextFromProject(project, totalSeconds, true, timeEntryNameToStatusMap);
     textWithoutTime += createTextFromProject(project, totalSeconds, false, timeEntryNameToStatusMap);
   });
@@ -42,14 +38,15 @@ const main = async (): Promise<void> => {
   textWithTime += "\n---\n\n";
   textWithoutTime += "\n---\n\n";
 
-  textWithTime += `unimportantProjects の合計時間: ${createTextOfTotalTimeOfProjects(
-    unimportantProjects,
-    totalSeconds
-  )}\n`;
+  Object.entries(GROUP_SETTINGS).forEach(([groupName, names]) => {
+    const projects = otherProjects.filter((project) => names.includes(project.name));
 
-  unimportantProjects.forEach((project) => {
-    textWithTime += createTextFromProject(project, totalSeconds, true, timeEntryNameToStatusMap);
-    textWithoutTime += createTextFromProject(project, totalSeconds, false, timeEntryNameToStatusMap);
+    textWithTime += `## ${groupName} の合計時間: ${createTextOfTotalTimeOfProjects(projects, totalSeconds)}\n`;
+
+    projects.forEach((project) => {
+      textWithTime += createTextFromProject(project, totalSeconds, true, timeEntryNameToStatusMap);
+      textWithoutTime += createTextFromProject(project, totalSeconds, false, timeEntryNameToStatusMap);
+    });
   });
 
   const resultText = `${textWithTime}\n--------------\n\n${textWithoutTime}`;
@@ -58,7 +55,7 @@ const main = async (): Promise<void> => {
   if (!fs.existsSync("results")) {
     fs.mkdirSync("results");
   }
-  fs.writeFileSync(`results/${resultTextFileName}.txt`, resultText);
+  fs.writeFileSync(`results/${resultTextFileName}.md`, resultText);
 
   console.log("--------------------------------------------");
   console.log(filePath);
