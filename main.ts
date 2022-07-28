@@ -29,7 +29,7 @@ const main = async (): Promise<void> => {
       type: "select",
       name: "value",
       message: `「${timeEntry.name}」の状態は？`,
-      choices: ["WIP", "レビュー中", "修正中", "ステージング確認中", "本番反映済み"],
+      choices: ["WIP", "レビュー中", "修正中", "ステージング確認中", "本番反映済み", "DONE"],
     });
 
     timeEntryNameToStatusMap.set(timeEntry.name, status.value);
