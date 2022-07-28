@@ -17,14 +17,14 @@ const main = async (): Promise<void> => {
   const unimportantProjects = projectArray.filter((project) => UNIMPORTANT_PROJECTS.includes(project.name));
   const importantProjects = projectArray.filter((project) => !UNIMPORTANT_PROJECTS.includes(project.name));
 
-  const allTimeEntries = importantProjects
+  const timeEntriesNeedToChoiceStatus = importantProjects
     .filter((project) => project.name !== "General")
     .map((project) => project.timeEntries)
     .flat();
 
   const timeEntryNameToStatusMap = new Map<string, string>();
   // eslint-disable-next-line no-restricted-syntax
-  for await (const timeEntry of allTimeEntries) {
+  for await (const timeEntry of timeEntriesNeedToChoiceStatus) {
     const status: { value: string } = await prompt({
       type: "select",
       name: "value",
