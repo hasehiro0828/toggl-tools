@@ -1,14 +1,14 @@
 /* eslint-disable no-console */
 import * as fs from "fs";
 
-import { GROUP_SETTINGS } from "@/constants";
+import { GROUP_SETTINGS } from "@/csv2text/constants";
 import {
   convertSecondsToDuration,
   createTextFromProject,
   createTextOfTotalTimeOfProjects,
   getProjectsFromCsv,
   getTimeEntryNameToStatusMap,
-} from "@/utils";
+} from "@/csv2text/utils";
 
 const GROUP_PROJECT_MAP = new Map<string, string>(
   Object.entries(GROUP_SETTINGS).flatMap(([group, names]) => names.map((name) => [name, group]))

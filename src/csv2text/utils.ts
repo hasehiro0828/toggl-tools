@@ -4,8 +4,8 @@ import { exit } from "process";
 import { prompt } from "enquirer";
 import papaparse from "papaparse";
 
-import { NAME_TO_ALIAS_MAP } from "@/constants";
-import { Project, TimeEntry, TogglCsvJson } from "@/model";
+import { NAME_TO_ALIAS_MAP } from "@/csv2text/constants";
+import { Project, TimeEntry, TogglCsvJson } from "@/csv2text/model";
 
 export const convertDurationToSeconds = (duration: string): number => {
   const [hours, minutes, seconds] = duration.split(":").map((str) => parseInt(str, 10));
