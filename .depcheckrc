@@ -1,1 +1,1 @@
-ignores: ["depcheck", "prettier", "tsconfig-paths"]
+ignores: ["depcheck", "prettier", "tsconfig-paths", "ts-node", "typescript"]

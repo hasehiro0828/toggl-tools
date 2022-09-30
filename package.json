@@ -1,12 +1,10 @@
 {
   "name": "toggl-csv-to-text-typescript",
   "version": "1.0.0",
-  "main": "index.js",
   "repository": "ssh://git@github.com/hasehiro0828/toggl-csv-to-text-typescript.git",
   "author": "Hiroto Hasegawa <hiroto_hasegawa@voyagegroup.com>",
   "license": "MIT",
   "scripts": {
-    "start": "ts-node -r tsconfig-paths/register main.ts",
     "prepare": "husky install"
   },
   "lint-staged": {
