@@ -2,7 +2,7 @@
   "name": "toggl-tools",
   "version": "1.0.0",
   "repository": "ssh://git@github.com/hasehiro0828/toggl-tools.git",
-  "author": "Hiroto Hasegawa <hiroto_hasegawa@voyagegroup.com>",
+  "author": "Hiroto Hasegawa <hiroto.hasegawa.0828@gmail.com>",
   "license": "MIT",
   "private": true,
   "scripts": {
