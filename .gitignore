@@ -4,3 +4,4 @@ csv
 results
 
 constants.ts
+.env
