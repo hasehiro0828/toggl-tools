@@ -7,3 +7,5 @@ export const GROUP_SETTINGS = {
   A_GROUP: ["name1", "name2"],
   B_GROUP: ["name3"],
 };
+
+export const IGNORE_PROJECT_NAMES_ON_CHECKING_STATUS = ["name4"];
