@@ -1,1 +1,7 @@
-ignores: ["depcheck", "prettier", "tsconfig-paths", "ts-node", "typescript"]
+ignores:
+  - "depcheck"
+  - "prettier"
+  - "tsconfig-paths"
+  - "ts-node"
+  - "typescript"
+  - "@types/jest"
