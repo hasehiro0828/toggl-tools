@@ -1,8 +1,6 @@
 {
-  "cSpell.words": [
-    "clipboardy",
-    "Nodenv",
-    "papaparse",
-    "toggl"
-  ]
+  "cSpell.words": ["clipboardy", "Nodenv", "papaparse", "toggl"],
+  "files.associations": {
+    ".depcheckrc": "yaml"
+  }
 }

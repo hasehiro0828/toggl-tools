@@ -9,6 +9,9 @@
     "prepare": "husky install",
     "test": "jest"
   },
+  "bin": {
+    "make-toggl-summary": "./bin/makeSummary.js"
+  },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,json,md}": [
       "prettier --write"
@@ -23,6 +26,7 @@
     "@typescript-eslint/eslint-plugin": "^4.26.0",
     "@typescript-eslint/parser": "^4.26.0",
     "depcheck": "^1.4.2",
+    "esbuild": "^0.15.10",
     "eslint": "^7.28.0",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-config-prettier": "^8.3.0",

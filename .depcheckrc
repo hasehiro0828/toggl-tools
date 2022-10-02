@@ -5,3 +5,4 @@ ignores:
   - "ts-node"
   - "typescript"
   - "@types/jest"
+  - "esbuild"
