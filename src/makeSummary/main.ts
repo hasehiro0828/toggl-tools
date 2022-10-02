@@ -5,6 +5,7 @@ import {
   API_TOKEN,
   GROUP_SETTINGS,
   IGNORE_PROJECT_NAMES_ON_CHECKING_STATUS,
+  NAME_TO_ALIAS_MAP,
   RESULTS_DIR_ABSOLUTE_PATH,
   WORKSPACE_ID,
 } from "@/common/config";
@@ -38,8 +39,9 @@ const main = async (): Promise<void> => {
 
   // eslint-disable-next-line no-restricted-syntax
   for (const project of devProjects) {
-    textWithTime += `- ${createTimeText(project.time, summary.total_grand)} ${project.title.project}\n`;
-    textWithoutTime += `- ${project.title.project}\n`;
+    const projectName = NAME_TO_ALIAS_MAP.get(project.title.project) ?? project.title.project;
+    textWithTime += `- ${createTimeText(project.time, summary.total_grand)} ${projectName}\n`;
+    textWithoutTime += `- ${projectName}\n`;
     // eslint-disable-next-line no-restricted-syntax
     for (const item of project.items) {
       const text = IGNORE_PROJECT_NAMES_ON_CHECKING_STATUS.includes(project.title.project)
