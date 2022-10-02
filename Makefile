@@ -16,7 +16,11 @@ build/makeSummary: deps
 	yarn tsc --noEmit
 	yarn esbuild src/makeSummary/main.ts --bundle --platform=node --outfile=dist/makeSummary.js
 
-build/all: build/makeSummary
+build/runTimeEntry: deps
+	yarn tsc --noEmit
+	yarn esbuild src/runTimeEntry/main.ts --bundle --platform=node --outfile=dist/runTimeEntry.js
+
+build/all: build/makeSummary build/runTimeEntry
 
 global-install: build/all create-bin-files
 	yarn global add file:$(PWD)

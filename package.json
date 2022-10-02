@@ -10,7 +10,8 @@
     "test": "jest"
   },
   "bin": {
-    "make-toggl-summary": "./bin/makeSummary.js"
+    "tt-make-summary": "./bin/makeSummary.js",
+    "tt-run": "./bin/runTimeEntry.js"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,json,md}": [
