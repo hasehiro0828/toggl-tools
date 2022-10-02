@@ -9,3 +9,6 @@ export const GROUP_SETTINGS = {
 };
 
 export const IGNORE_PROJECT_NAMES_ON_CHECKING_STATUS = ["name4"];
+export const API_TOKEN = "{API_TOKEN}";
+export const WORKSPACE_ID = "{WORKSPACE_ID}";
+export const RESULTS_DIR_ABSOLUTE_PATH = "{/path/to/results}";

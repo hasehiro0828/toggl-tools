@@ -1,7 +1,4 @@
 node_modules
 .history
-csv
-results
 
-constants.ts
-.env
+config.ts

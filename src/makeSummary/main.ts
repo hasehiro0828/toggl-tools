@@ -3,7 +3,13 @@ import * as fs from "fs";
 import { config } from "dotenv";
 
 import Api from "@/makeSummary/api";
-import { GROUP_SETTINGS, IGNORE_PROJECT_NAMES_ON_CHECKING_STATUS } from "@/makeSummary/constants";
+import {
+  API_TOKEN,
+  GROUP_SETTINGS,
+  IGNORE_PROJECT_NAMES_ON_CHECKING_STATUS,
+  RESULTS_DIR_ABSOLUTE_PATH,
+  WORKSPACE_ID,
+} from "@/makeSummary/config";
 import {
   getMondayOfLastWeek,
   convertDateToString,
@@ -15,7 +21,7 @@ import {
 config();
 
 const main = async (): Promise<void> => {
-  const api = new Api(process.env.WORKSPACE_ID, process.env.API_TOKEN);
+  const api = new Api(WORKSPACE_ID, API_TOKEN);
 
   const since = getMondayOfLastWeek(new Date());
   const _until = new Date(since); // eslint-disable-line no-underscore-dangle
@@ -77,7 +83,7 @@ const main = async (): Promise<void> => {
   resultText += "\n------------\n\n";
   resultText += `${textWithoutTime}`;
 
-  const resultsDirPath = process.env.RESULTS_DIR_ABSOLUTE_PATH;
+  const resultsDirPath = RESULTS_DIR_ABSOLUTE_PATH;
 
   const filePath = `${resultsDirPath}/${convertDateToString(since)}_${convertDateToString(until)}.md`;
   if (!fs.existsSync(resultsDirPath)) {
