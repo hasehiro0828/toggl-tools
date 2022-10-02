@@ -9,7 +9,7 @@ import {
   IGNORE_PROJECT_NAMES_ON_CHECKING_STATUS,
   RESULTS_DIR_ABSOLUTE_PATH,
   WORKSPACE_ID,
-} from "@/makeSummary/config";
+} from "@/common/config";
 import {
   getMondayOfLastWeek,
   convertDateToString,
