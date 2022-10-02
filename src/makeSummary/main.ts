@@ -1,7 +1,5 @@
 import * as fs from "fs";
 
-import { config } from "dotenv";
-
 import Api from "@/common/api";
 import {
   API_TOKEN,
@@ -17,8 +15,6 @@ import {
   createTimeText,
   getTimeEntryTextWithStatus,
 } from "@/makeSummary/utils";
-
-config();
 
 const main = async (): Promise<void> => {
   const api = new Api(WORKSPACE_ID, API_TOKEN);
