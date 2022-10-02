@@ -9,6 +9,9 @@ test: deps
 run/makeSummary: deps
 	yarn ts-node --files -r tsconfig-paths/register src/makeSummary/main.ts
 
+run/runTimeEntry: deps
+	yarn ts-node --files -r tsconfig-paths/register src/runTimeEntry/main.ts
+
 build/makeSummary: deps
 	yarn tsc --noEmit
 	yarn esbuild src/makeSummary/main.ts --bundle --platform=node --outfile=dist/makeSummary.js
