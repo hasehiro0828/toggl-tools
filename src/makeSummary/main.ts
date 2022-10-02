@@ -2,7 +2,7 @@ import * as fs from "fs";
 
 import { config } from "dotenv";
 
-import Api from "@/makeSummary/api";
+import Api from "@/common/api";
 import {
   API_TOKEN,
   GROUP_SETTINGS,
