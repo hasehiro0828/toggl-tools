@@ -1,6 +1,11 @@
 # toggl-tools
 
-[toggl track](https://toggl.com/track/) の csv をいい感じにフォーマットするスクリプト
+## tt-make-summary
+先週分の summary を作成する
+
+## tt-run
+favorite の代わり
+指定の TimeEntry の記録を開始する
 
 ## `constants.example.ts`について
 
